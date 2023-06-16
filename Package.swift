@@ -13,7 +13,7 @@ let package = Package(
             targets: ["RawJson"]),
     ],
     dependencies: [
-         .package(url: "https://github.com/apple/swift-foundation.git", branch: "main")
+//         .package(url: "https://github.com/apple/swift-foundation.git", branch: "main")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

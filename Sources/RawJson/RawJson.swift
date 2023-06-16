@@ -1,5 +1,4 @@
 
-// import FoundationPreview
 import Foundation
 
 public enum RawJson: Codable {
@@ -85,35 +84,5 @@ public enum RawJson: Codable {
         try container.encode(value, forKey: JSONCodingKeys(stringValue: key)!)
       }
     }
-  }
-}
-
-struct JSONCodingKeys: CodingKey {
-  var stringValue: String
-
-  init?(stringValue: String) {
-    self.stringValue = stringValue
-  }
-
-  var intValue: Int?
-
-  init?(intValue: Int) {
-    self.init(stringValue: "\(intValue)")
-    self.intValue = intValue
-  }
-}
-
-public struct PartialCodable<ConcreteType>: Codable where ConcreteType: Codable {
-  public let value: ConcreteType
-  public let raw: RawJson
-
-  public init(from decoder: Decoder) throws {
-    raw = try RawJson(from: decoder)
-    value = try ConcreteType.init(from: decoder)
-  }
-
-  public func encode(to encoder: Encoder) throws {
-    try raw.encode(to: encoder)
-    try value.encode(to: encoder)
   }
 }
