@@ -1,6 +1,6 @@
 //
 //  FallbackCodable.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 17/06/2023.
 //
@@ -8,33 +8,47 @@
 import Foundation
 
 public enum FallbackCodable<ConcreteType>: Codable where ConcreteType: Codable {
+    case value(ConcreteType)
+    case raw(RawJson, Error)
 
-  case value(ConcreteType)
-  case raw(RawJson, Error)
-
-  public init(from decoder: Decoder) throws {
-    do {
-      self = .value(try ConcreteType.init(from: decoder))
-    } catch {
-      self = .raw(try RawJson(from: decoder), error)
+    public init(from decoder: Decoder) throws {
+        do {
+            self = try .value(ConcreteType(from: decoder))
+        } catch {
+            self = try .raw(RawJson(from: decoder), error)
+        }
     }
-  }
 
-  public func encode(to encoder: Encoder) throws {
-    switch self {
-    case .value(let value):
-      try value.encode(to: encoder)
-    case .raw(let raw, _):
-      try raw.encode(to: encoder)
+    public func encode(to encoder: Encoder) throws {
+        switch self {
+        case let .value(value):
+            try value.encode(to: encoder)
+        case let .raw(raw, _):
+            try raw.encode(to: encoder)
+        }
     }
-  }
 
-  public var value: ConcreteType? {
-    switch self {
-    case .value(let value):
-      return value
-    case .raw:
-      return nil
+    public var value: ConcreteType? {
+        switch self {
+        case let .value(value):
+            return value
+        case .raw:
+            return nil
+        }
     }
-  }
+}
+
+extension FallbackCodable: Equatable where ConcreteType: Equatable {
+    public static func == (_ lhs: FallbackCodable<ConcreteType>, _ rhs: FallbackCodable<ConcreteType>) -> Bool {
+        switch (lhs, rhs) {
+        case let (.value(lhsValue), .value(rhsValue)):
+            return lhsValue == rhsValue
+
+        case let (.raw(lhsValue, _), .raw(rhsValue, _)):
+            return lhsValue == rhsValue
+
+        default:
+            return false
+        }
+    }
 }

@@ -10,7 +10,8 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "RawJson",
-            targets: ["RawJson"]),
+            targets: ["RawJson"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/realm/SwiftLint.git", .upToNextMinor(from: "0.52.2")),
@@ -28,6 +29,7 @@ let package = Package(
         ),
         .testTarget(
             name: "RawJsonTests",
-            dependencies: ["RawJson"]),
+            dependencies: ["RawJson"]
+        ),
     ]
 )
