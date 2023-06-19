@@ -33,6 +33,7 @@ final class PartialCodableTests: XCTestCase {
         raw: .dictionary(["test": .string("tomas")])
       )
     )
+    XCTAssertNil(parsed.error)
   }
 
   func test_Failed() throws {
@@ -51,6 +52,8 @@ final class PartialCodableTests: XCTestCase {
         raw: .dictionary(["test": .double(1)])
       )
     )
+    
+    XCTAssertNotNil(parsed.error)
   }
     
     func testNested_Success() throws {
@@ -66,6 +69,9 @@ final class PartialCodableTests: XCTestCase {
         parsed,
         TestNestedModel(test: PartialCodable(value: "tomas", raw: .string("tomas")))
       )
+      
+      
+      XCTAssertNil(parsed.test.error)
     }
 
     func testNested_Failed() throws {
@@ -81,5 +87,7 @@ final class PartialCodableTests: XCTestCase {
         parsed,
         TestNestedModel(test: PartialCodable(value: nil, raw: .double(1)))
       )
+      
+      XCTAssertNotNil(parsed.test.error)
     }
 }
