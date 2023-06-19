@@ -59,4 +59,5 @@ jobs:
         brew install mint
         mint install unsignedapps/swift-create-xcframework
         export PATH="$(pwd)/.mint/bin:$PATH"
+        rm -rf .build/swift-create-xcframework/build
         swift create-xcframework --zip
