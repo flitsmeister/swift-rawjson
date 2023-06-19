@@ -46,7 +46,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-spm-release
     - name: disable plugin
-      run: sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
+      run: |
+        sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
+        sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift
+        sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
     - name: run xcframework
       run: |
         set -x
