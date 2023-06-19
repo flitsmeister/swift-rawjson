@@ -25,18 +25,23 @@ jobs:
     - name: disable plugin
       run: sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift 
     - name: Run build
-      run: swift build --disable-sandbox
+      run: swift build
     - name: Run tests
-      run: swift test --disable-sandbox
+      run: swift test
 
   xcframework:
     runs-on: macos-latest
     needs: build
+    env:
+      MINT_PATH: .mint/lib
+      MINT_LINK_PATH: .mint/bin
     steps:
     - uses: actions/checkout@v3
     - uses: actions/cache@v3
       with:
-        path: .build
+        path: |
+          .build
+          .mint
         key: ${{ runner.os }}-spm-release-${{ hashFiles('**/Package.resolved') }}
         restore-keys: |
           ${{ runner.os }}-spm-release
@@ -44,6 +49,8 @@ jobs:
       run: sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
     - name: run xcframework
       run: |
+        set -x
         brew install mint
         mint install unsignedapps/swift-create-xcframework
+        export PATH="$(pwd)/.mint/bin:$PATH"
         swift create-xcframework --zip
