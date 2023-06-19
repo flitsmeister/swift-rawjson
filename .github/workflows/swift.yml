@@ -23,7 +23,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-spm   
     - name: disable plugin
-      run: sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift 
+      run: |
+        sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
+        sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift
+        sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
     - name: Run build
       run: swift build
     - name: Run tests
