@@ -34,7 +34,6 @@ import Foundation
 ///
 /// ```
 public enum FallbackCodable<ConcreteType>: Codable where ConcreteType: Codable {
-
   /// This value will be present when parsing of `ConcreteType` succeeds.
   case value(ConcreteType)
 

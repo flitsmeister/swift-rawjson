@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// A type to fallback to a raw representation of the JSON object if parsing of the `ConcreteType` fails.
 /// You'll get both the parsed value and the raw json. If parsing fails, you'll also get an error through the `.error` member.
 ///

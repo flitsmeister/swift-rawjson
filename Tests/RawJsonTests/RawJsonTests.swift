@@ -1,6 +1,6 @@
 //
 //  RawJsonTests.swift
-//  
+//
 //
 //  Created by Tomas Harkema on 19/06/2023.
 //
@@ -9,7 +9,6 @@
 import XCTest
 
 final class RawJsonTests: XCTestCase {
-
   private func encode(in value: RawJson) throws -> String {
     let encoder = JSONEncoder()
     encoder.outputFormatting = .sortedKeys
@@ -18,7 +17,7 @@ final class RawJsonTests: XCTestCase {
   }
 
   private func decode(in value: String) throws -> RawJson {
-    return try JSONDecoder().decode(RawJson.self, from: value.data(using: .utf8)!)
+    try JSONDecoder().decode(RawJson.self, from: value.data(using: .utf8)!)
   }
 
   func testBool() throws {
@@ -58,7 +57,7 @@ final class RawJsonTests: XCTestCase {
     let obj = RawJson.array([
       RawJson.bool(true),
       RawJson.bool(true),
-      RawJson.bool(false)
+      RawJson.bool(false),
     ])
     let jsonString = try encode(in: obj)
 
@@ -73,7 +72,7 @@ final class RawJsonTests: XCTestCase {
     let obj = RawJson.array([
       RawJson.double(1),
       RawJson.double(2),
-      RawJson.double(3.4)
+      RawJson.double(3.4),
     ])
     let jsonString = try encode(in: obj)
 
@@ -88,7 +87,7 @@ final class RawJsonTests: XCTestCase {
     let obj = RawJson.array([
       RawJson.string("test"),
       RawJson.string("tomas"),
-      RawJson.string("hallo")
+      RawJson.string("hallo"),
     ])
     let jsonString = try encode(in: obj)
 
@@ -103,11 +102,12 @@ final class RawJsonTests: XCTestCase {
     let obj = RawJson.array([
       RawJson.bool(true),
       RawJson.double(1),
-      RawJson.string("string")
+      RawJson.double(2.4),
+      RawJson.string("string"),
     ])
     let jsonString = try encode(in: obj)
 
-    XCTAssertEqual(jsonString, "[true,1,\"string\"]")
+    XCTAssertEqual(jsonString, "[true,1,2.3999999999999999,\"string\"]")
 
     let back = try decode(in: jsonString)
 
@@ -118,7 +118,7 @@ final class RawJsonTests: XCTestCase {
     let obj = RawJson.dictionary([
       "test": RawJson.bool(true),
       "tomas": RawJson.bool(true),
-      "hallo": RawJson.bool(false)
+      "hallo": RawJson.bool(false),
     ])
     let jsonString = try encode(in: obj)
 
@@ -131,9 +131,9 @@ final class RawJsonTests: XCTestCase {
 
   func testDictDouble() throws {
     let obj = RawJson.dictionary([
-      "test":   RawJson.double(1),
-      "tomas":   RawJson.double(2),
-      "hallo":   RawJson.double(3.4)
+      "test": RawJson.double(1),
+      "tomas": RawJson.double(2),
+      "hallo": RawJson.double(3.4),
     ])
     let jsonString = try encode(in: obj)
 
@@ -148,7 +148,7 @@ final class RawJsonTests: XCTestCase {
     let obj = RawJson.dictionary([
       "test": RawJson.string("test"),
       "tomas": RawJson.string("tomas"),
-      "hallo": RawJson.string("hallo")
+      "hallo": RawJson.string("hallo"),
     ])
     let jsonString = try encode(in: obj)
 
@@ -162,16 +162,16 @@ final class RawJsonTests: XCTestCase {
   func testDictMixed() throws {
     let obj = RawJson.dictionary([
       "bool": RawJson.bool(true),
-      "double": RawJson.double(1),
-      "string": RawJson.string("string")
+      "int": RawJson.double(1),
+      "double": RawJson.double(2.4),
+      "string": RawJson.string("string"),
     ])
     let jsonString = try encode(in: obj)
 
-    XCTAssertEqual(jsonString, "{\"bool\":true,\"double\":1,\"string\":\"string\"}")
+    XCTAssertEqual(jsonString, "{\"bool\":true,\"double\":2.3999999999999999,\"int\":1,\"string\":\"string\"}")
 
     let back = try decode(in: jsonString)
 
     XCTAssertEqual(obj, back)
   }
-
 }
