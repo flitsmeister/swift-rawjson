@@ -25,4 +25,4 @@ jobs:
     - name: Build
       run: swift build -v --disable-sandbox 
     - name: Run tests
-      run: swift test -v
+      run: swift test -v; echo $?
