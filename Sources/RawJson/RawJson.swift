@@ -18,9 +18,22 @@ public enum RawJson: Codable, Equatable {
     if let container = try? decoder.container(keyedBy: JSONCodingKeys.self) {
       self = RawJson(from: container)
     } else if let container = try? decoder.unkeyedContainer() {
-      self = RawJson(from: container)
+        self = RawJson(from: container)
     } else {
-      throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: ""))
+        
+        let container = try decoder.singleValueContainer()
+        
+        if let boolValue = try? container.decode(Bool.self) {
+            self = .bool(boolValue)
+        } else if let doubleValue = try? container.decode(Double.self) {
+            self = .double(doubleValue)
+        } else if let intValue = try? container.decode(Int.self) {
+            self = .double(Double(intValue))
+        } else if let stringValue = try? container.decode(String.self) {
+            self = .string(stringValue)
+        } else {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: ""))
+        }
     }
   }
 

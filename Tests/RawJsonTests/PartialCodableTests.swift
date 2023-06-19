@@ -8,8 +8,12 @@
 @testable import RawJson
 import XCTest
 
-private struct TestModel: Codable, Hashable, Equatable {
+private struct TestModel: Codable, Equatable {
   let test: String
+}
+
+private struct TestNestedModel: Codable, Equatable {
+  let test: PartialCodable<String>
 }
 
 final class PartialCodableTests: XCTestCase {
@@ -48,4 +52,34 @@ final class PartialCodableTests: XCTestCase {
       )
     )
   }
+    
+    func testNested_Success() throws {
+      let json = """
+      {
+      "test": "tomas",
+      }
+      """.data(using: .utf8)!
+
+      let parsed = try JSONDecoder().decode(TestNestedModel.self, from: json)
+
+      XCTAssertEqual(
+        parsed,
+        TestNestedModel(test: PartialCodable(value: "tomas", raw: .string("tomas")))
+      )
+    }
+
+    func testNested_Failed() throws {
+      let json = """
+      {
+      "test": 1,
+      }
+      """.data(using: .utf8)!
+
+      let parsed = try JSONDecoder().decode(TestNestedModel.self, from: json)
+
+      XCTAssertEqual(
+        parsed,
+        TestNestedModel(test: PartialCodable(value: nil, raw: .double(1)))
+      )
+    }
 }
