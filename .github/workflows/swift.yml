@@ -22,7 +22,5 @@ jobs:
         key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
         restore-keys: |
           ${{ runner.os }}-spm
-    - name: Build
-      run: swift build -v --disable-sandbox 
     - name: Run tests
-      run: swift test -v; echo $?
+      run: swift test -v --disable-sandbox; echo $?
