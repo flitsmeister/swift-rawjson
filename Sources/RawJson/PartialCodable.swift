@@ -7,6 +7,34 @@
 
 import Foundation
 
+
+/// A type to fallback to a raw representation of the JSON object if parsing of the `ConcreteType` fails.
+/// You'll get both the parsed value and the raw json. If parsing fails, you'll also get an error through the `.error` member.
+///
+/// Use this type either as a top level catch, or for certain sub values.
+///
+/// Example:
+/// ```swift
+///
+/// // Top level example
+///
+/// struct Model: Codable {
+///   let test: String
+/// }
+///
+/// try JSONDecoder().decode([PartialCodable<Model>].self, from: data)
+///
+/// // Nested example
+///
+/// private struct NestedModel: Codable, Equatable {
+///   let test: PartialCodable<String>
+/// }
+///
+/// let object = try JSONDecoder().decode(NestedModel.self, from: data)
+///
+/// object.value // NestedModel(test: .value("tomas"))
+///
+/// ```
 public struct PartialCodable<ConcreteType>: Codable where ConcreteType: Codable {
   public let value: ConcreteType?
   public let raw: RawJson

@@ -7,6 +7,20 @@
 
 import Foundation
 
+/// RawJson type safely represents a JSON object. This is meant to replace Any when using `JSONSerialization`.
+/// In this package, its mainly use to make `PartialCodable` and `FallbackCodable` work.
+///
+/// Instead of:
+/// ```swift
+/// let obj = try JSONSerialization.jsonObject(with: data) as? [String: Ant]
+/// ```
+/// ...do:
+/// ```swift
+/// let obj = try JSONDecoder().decode(RawJson.self, from: data)
+/// if case .dictionary(let dict) = obj {
+///   print(dict
+/// }
+/// ```
 public enum RawJson: Codable, Equatable {
   case bool(Bool)
   case double(Double)
@@ -20,7 +34,6 @@ public enum RawJson: Codable, Equatable {
     } else if let container = try? decoder.unkeyedContainer() {
         self = RawJson(from: container)
     } else {
-        
         let container = try decoder.singleValueContainer()
         
         if let boolValue = try? container.decode(Bool.self) {

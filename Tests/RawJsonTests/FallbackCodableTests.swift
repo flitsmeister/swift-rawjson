@@ -12,6 +12,10 @@ private struct TestModel: Codable, Hashable, Equatable {
   let test: String
 }
 
+private struct TestNestedModel: Codable, Equatable {
+  let test: FallbackCodable<String>
+}
+
 final class FallbackCodableTests: XCTestCase {
   func test_Success() throws {
     let json = """
