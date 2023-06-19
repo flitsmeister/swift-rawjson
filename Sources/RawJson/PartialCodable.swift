@@ -57,10 +57,19 @@ public struct PartialCodable<ConcreteType>: Codable where ConcreteType: Codable 
   }
 
   public func encode(to encoder: Encoder) throws {
-    if let value {
-      try value.encode(to: encoder)
-    } else {
+    switch raw {
+    case .dictionary:
       try raw.encode(to: encoder)
+      if let value {
+        try value.encode(to: encoder)
+      }
+
+    default:
+      if let value {
+        try value.encode(to: encoder)
+      } else {
+        try raw.encode(to: encoder)
+      }
     }
   }
 }
