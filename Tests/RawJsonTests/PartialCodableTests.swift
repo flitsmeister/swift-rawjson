@@ -90,4 +90,66 @@ final class PartialCodableTests: XCTestCase {
       
       XCTAssertNotNil(parsed.test.error)
     }
+
+  func testBothWays_Success() throws {
+    let json = """
+      {
+      "test": "tomas",
+      }
+      """.data(using: .utf8)!
+
+    let parsed = try JSONDecoder().decode(PartialCodable<TestModel>.self, from: json)
+
+    let jsonData = try JSONEncoder().encode(parsed)
+    let jsonNew = String(data: jsonData, encoding: .utf8)
+
+    XCTAssertEqual(jsonNew, "{\"test\":\"tomas\"}")
+    XCTAssertNil(parsed.error)
+  }
+
+  func testBothWays_Failed() throws {
+    let json = """
+      {
+      "test": 1,
+      }
+      """.data(using: .utf8)!
+
+    let parsed = try JSONDecoder().decode(PartialCodable<TestModel>.self, from: json)
+
+    let jsonData = try JSONEncoder().encode(parsed)
+    let jsonNew = String(data: jsonData, encoding: .utf8)
+
+    XCTAssertEqual(jsonNew, "{\"test\":1}")
+    XCTAssertNotNil(parsed.error)
+  }
+
+  func testBothWaysNested_Success() throws {
+    let json = """
+      {
+      "test": "tomas",
+      }
+      """.data(using: .utf8)!
+
+    let parsed = try JSONDecoder().decode(TestNestedModel.self, from: json)
+
+    let jsonData = try JSONEncoder().encode(parsed)
+    let jsonNew = String(data: jsonData, encoding: .utf8)
+
+    XCTAssertEqual(jsonNew, "{\"test\":\"tomas\"}")
+  }
+
+  func testBothWaysNested_Failed() throws {
+    let json = """
+      {
+      "test": 1,
+      }
+      """.data(using: .utf8)!
+
+    let parsed = try JSONDecoder().decode(TestNestedModel.self, from: json)
+
+    let jsonData = try JSONEncoder().encode(parsed)
+    let jsonNew = String(data: jsonData, encoding: .utf8)
+
+    XCTAssertEqual(jsonNew, "{\"test\":1}")
+  }
 }

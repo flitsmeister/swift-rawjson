@@ -30,8 +30,11 @@ public struct PartialCodable<ConcreteType>: Codable where ConcreteType: Codable 
   }
 
   public func encode(to encoder: Encoder) throws {
-    try raw.encode(to: encoder)
-    try value.encode(to: encoder)
+    if let value {
+      try value.encode(to: encoder)
+    } else {
+      try raw.encode(to: encoder)
+    }
   }
 }
 
