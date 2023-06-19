@@ -21,7 +21,9 @@ jobs:
         path: .build
         key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
         restore-keys: |
-          ${{ runner.os }}-spm    
+          ${{ runner.os }}-spm   
+    - name: disable plugin
+      run: sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift 
     - name: Run build
       run: swift build --disable-sandbox
     - name: Run tests
