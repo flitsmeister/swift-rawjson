@@ -34,8 +34,8 @@ let package = Package(
     ),
     .binaryTarget(
       name: "RawJsonBinary",
-      url: "https://github.com/flitsmeister/swift-rawjson/releases/download/0.0.9/RawJson.zip",
-      checksum: "cad32f9189cf2e817a21a546f06156b90038c8644514f1ae50276f5563954b5f"
+      url: "https://github.com/flitsmeister/swift-rawjson/releases/download/0.0.11/RawJson.zip",
+      checksum: "80c580a5a123dcf994658f92cb21eff28f6398f31e8ce09ca03d30fda625e21a"
     )
   ]
 )
