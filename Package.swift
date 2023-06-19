@@ -32,5 +32,10 @@ let package = Package(
       name: "RawJsonTests",
       dependencies: ["RawJson"]
     ),
+    .binaryTarget(
+      name: "RawJsonBinary",
+      url: "https://github.com/flitsmeister/swift-rawjson/releases/download/0.0.9/RawJson.zip",
+      checksum: "cad32f9189cf2e817a21a546f06156b90038c8644514f1ae50276f5563954b5f"
+    )
   ]
 )
