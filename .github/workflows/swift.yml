@@ -27,6 +27,8 @@ jobs:
         sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
         sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift
         sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
+    - name: Run clean
+      run: swift package clean
     - name: Run build
       run: swift build
     - name: Run tests
