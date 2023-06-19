@@ -45,4 +45,5 @@ jobs:
     - name: run xcframework
       run: |
         brew install mint
+        mint install unsignedapps/swift-create-xcframework
         swift create-xcframework --zip
