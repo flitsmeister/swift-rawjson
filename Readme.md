@@ -27,3 +27,11 @@ let json = try JSONDecoder().decode([FallbackCodable<Person>].self, from: person
 ```sh
 swift package plugin --allow-writing-to-package-directory swiftformat
 ```
+
+## Run Tests
+
+```sh
+swift test --enable-code-coverage
+
+/Library/Developer/CommandLineTools/usr/bin/llvm-cov report .build/debug/RawJsonPackageTests.xctest/Contents/MacOS/RawJsonPackageTests -instr-profile=.build/debug/codecov/default.profdata
+```

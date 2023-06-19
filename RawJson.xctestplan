@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "8175B08E-A319-4A58-BC88-16B6B8DADB27",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "RawJsonTests",
+        "name" : "RawJsonTests"
+      }
+    }
+  ],
+  "version" : 1
+}

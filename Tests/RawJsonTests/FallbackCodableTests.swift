@@ -1,7 +1,14 @@
+//
+//  FallbackCodableTests.swift
+//
+//
+//  Created by Tomas Harkema on 19/06/2023.
+//
+
 @testable import RawJson
 import XCTest
 
-struct TestModel: Codable, Hashable, Equatable {
+private struct TestModel: Codable, Hashable, Equatable {
   let test: String
 }
 
