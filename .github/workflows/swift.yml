@@ -5,34 +5,33 @@ name: Swift
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/cache@v3
-      with:
-        path: .build
-        key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-        restore-keys: |
-          ${{ runner.os }}-spm   
-    - name: disable plugin
-      run: |
-        sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
-        sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift
-        sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
-    - name: Run clean
-      run: swift package clean
-    - name: Run build
-      run: swift build
-    - name: Run tests
-      run: swift test
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm
+      - name: disable plugin
+        run: |
+          sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
+          sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift
+          sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
+      - name: Run clean
+        run: swift package clean
+      - name: Run build
+        run: swift build --product RawJson
+      - name: Run tests
+        run: swift test
 
   xcframework:
     runs-on: macos-latest
@@ -41,25 +40,25 @@ jobs:
       MINT_PATH: .mint/lib
       MINT_LINK_PATH: .mint/bin
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/cache@v3
-      with:
-        path: |
-          .build
-          .mint
-        key: ${{ runner.os }}-spm-release-${{ hashFiles('**/Package.resolved') }}
-        restore-keys: |
-          ${{ runner.os }}-spm-release
-    - name: disable plugin
-      run: |
-        sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
-        sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift
-        sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
-    - name: run xcframework
-      run: |
-        set -x
-        brew install mint
-        mint install unsignedapps/swift-create-xcframework
-        export PATH="$(pwd)/.mint/bin:$PATH"
-        rm -rf .build/swift-create-xcframework/build
-        swift create-xcframework --zip
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            .build
+            .mint
+          key: ${{ runner.os }}-spm-release-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-release
+      - name: disable plugin
+        run: |
+          sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
+          sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift
+          sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
+      - name: run xcframework
+        run: |
+          set -x
+          brew install mint
+          mint install unsignedapps/swift-create-xcframework
+          export PATH="$(pwd)/.mint/bin:$PATH"
+          rm -rf .build/swift-create-xcframework/build
+          swift create-xcframework --zip
