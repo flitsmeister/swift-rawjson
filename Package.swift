@@ -32,10 +32,10 @@ let package = Package(
       name: "RawJsonTests",
       dependencies: ["RawJson"]
     ),
-    .binaryTarget(
-      name: "RawJsonBinary",
-      url: "https://github.com/flitsmeister/swift-rawjson/releases/download/0.0.11/RawJson.zip",
-      checksum: "80c580a5a123dcf994658f92cb21eff28f6398f31e8ce09ca03d30fda625e21a"
-    )
+//    .binaryTarget(
+//      name: "RawJsonBinary",
+//      url: "https://github.com/flitsmeister/swift-rawjson/releases/download/0.0.11/RawJson.zip",
+//      checksum: "80c580a5a123dcf994658f92cb21eff28f6398f31e8ce09ca03d30fda625e21a"
+//    )
   ]
 )
