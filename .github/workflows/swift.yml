@@ -16,7 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: sandbox
+      run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
     - name: Build
-      run: swift build -v --disable-sandbox
+      run: swift build -v
     - name: Run tests
-      run: swift test -v --disable-sandbox
+      run: swift test -v
