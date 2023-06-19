@@ -2,62 +2,62 @@
 import XCTest
 
 struct TestModel: Codable, Hashable, Equatable {
-    let test: String
+  let test: String
 }
 
 final class FallbackCodableTests: XCTestCase {
-    func test_Success() throws {
-        let json = """
-        [{
-        "test": "tomas",
-        }]
-        """.data(using: .utf8)!
+  func test_Success() throws {
+    let json = """
+    [{
+    "test": "tomas",
+    }]
+    """.data(using: .utf8)!
 
-        let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
+    let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
 
-        XCTAssertEqual(parsed, [
-            FallbackCodable.value(TestModel(test: "tomas")),
-        ])
-    }
+    XCTAssertEqual(parsed, [
+      FallbackCodable.value(TestModel(test: "tomas")),
+    ])
+  }
 
-    func test_Failed() throws {
-        let json = """
-        [{
-        "test": 1,
-        }]
-        """.data(using: .utf8)!
+  func test_Failed() throws {
+    let json = """
+    [{
+    "test": 1,
+    }]
+    """.data(using: .utf8)!
 
-        let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
+    let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
 
-        XCTAssertEqual(parsed, [
-            FallbackCodable.raw(
-                .dictionary([
-                    "test": .double(1.0),
-                ]),
-                NSError(domain: "derp", code: 0)
-            ),
-        ])
-    }
+    XCTAssertEqual(parsed, [
+      FallbackCodable.raw(
+        .dictionary([
+          "test": .double(1.0),
+        ]),
+        NSError(domain: "derp", code: 0)
+      ),
+    ])
+  }
 
-    func test_Combined() throws {
-        let json = """
-        [{
-        "test": "tomas",
-        }, {
-        "test": 1,
-        }]
-        """.data(using: .utf8)!
+  func test_Combined() throws {
+    let json = """
+    [{
+    "test": "tomas",
+    }, {
+    "test": 1,
+    }]
+    """.data(using: .utf8)!
 
-        let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
+    let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
 
-        XCTAssertEqual(parsed, [
-            FallbackCodable.value(TestModel(test: "tomas")),
-            FallbackCodable.raw(
-                .dictionary([
-                    "test": .double(1.0),
-                ]),
-                NSError(domain: "derp", code: 0)
-            ),
-        ])
-    }
+    XCTAssertEqual(parsed, [
+      FallbackCodable.value(TestModel(test: "tomas")),
+      FallbackCodable.raw(
+        .dictionary([
+          "test": .double(1.0),
+        ]),
+        NSError(domain: "derp", code: 0)
+      ),
+    ])
+  }
 }

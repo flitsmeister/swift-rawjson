@@ -8,16 +8,16 @@
 import Foundation
 
 struct JSONCodingKeys: CodingKey {
-    var stringValue: String
+  var stringValue: String
 
-    init?(stringValue: String) {
-        self.stringValue = stringValue
-    }
+  init?(stringValue: String) {
+    self.stringValue = stringValue
+  }
 
-    var intValue: Int?
+  var intValue: Int?
 
-    init?(intValue: Int) {
-        self.init(stringValue: "\(intValue)")
-        self.intValue = intValue
-    }
+  init?(intValue: Int) {
+    self.init(stringValue: "\(intValue)")
+    self.intValue = intValue
+  }
 }
