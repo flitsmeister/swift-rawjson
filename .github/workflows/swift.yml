@@ -44,5 +44,5 @@ jobs:
       run: sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift
     - name: run xcframework
       run: |
-      brew install mint
-      swift create-xcframework --zip
+        brew install mint
+        swift create-xcframework --zip
