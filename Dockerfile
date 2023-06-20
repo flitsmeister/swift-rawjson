@@ -2,14 +2,15 @@ FROM swift:latest as builder
 WORKDIR /root
 
 COPY Package.* .
-RUN swift package resolve
-
-COPY Sources Sources
-COPY Tests Tests
 
 RUN sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift; \
     sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift; \
     sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
+
+RUN swift package resolve
+
+COPY Sources Sources
+COPY Tests Tests
 
 RUN swift build -v
 RUN swift test -v
