@@ -27,12 +27,13 @@ public enum RawJson: Codable, Equatable {
   case string(String)
   indirect case array([RawJson])
   indirect case dictionary([String: RawJson])
+  case null
 
   public init(from decoder: Decoder) throws {
     if let container = try? decoder.container(keyedBy: JSONCodingKeys.self) {
-      self = RawJson(from: container)
+      self = try RawJson(from: container)
     } else if let container = try? decoder.unkeyedContainer() {
-      self = RawJson(from: container)
+      self = try RawJson(from: container)
     } else {
       let container = try decoder.singleValueContainer()
 
@@ -45,12 +46,16 @@ public enum RawJson: Codable, Equatable {
       } else if let stringValue = try? container.decode(String.self) {
         self = .string(stringValue)
       } else {
-        throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: ""))
+        if try container.decodeNil() {
+          self = .null
+        } else {
+          throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "could not decode as nil"))
+        }
       }
     }
   }
 
-  private init(from container: KeyedDecodingContainer<JSONCodingKeys>) {
+  private init(from container: KeyedDecodingContainer<JSONCodingKeys>) throws {
     var dict: [String: RawJson] = [:]
     for key in container.allKeys {
       if let value = try? container.decode(Bool.self, forKey: key) {
@@ -60,15 +65,21 @@ public enum RawJson: Codable, Equatable {
       } else if let value = try? container.decode(String.self, forKey: key) {
         dict[key.stringValue] = .string(value)
       } else if let value = try? container.nestedContainer(keyedBy: JSONCodingKeys.self, forKey: key) {
-        dict[key.stringValue] = RawJson(from: value)
+        dict[key.stringValue] = try RawJson(from: value)
       } else if let value = try? container.nestedUnkeyedContainer(forKey: key) {
-        dict[key.stringValue] = RawJson(from: value)
+        dict[key.stringValue] = try RawJson(from: value)
+      } else {
+        if try container.decodeNil(forKey: key) {
+          dict[key.stringValue] = .null
+        } else {
+          throw DecodingError.typeMismatch(RawJson.self, DecodingError.Context(codingPath: container.codingPath, debugDescription: "could not encode as nil"))
+        }
       }
     }
     self = .dictionary(dict)
   }
 
-  private init(from container: UnkeyedDecodingContainer) {
+  private init(from container: UnkeyedDecodingContainer) throws {
     var container = container
     var arr: [RawJson] = []
     while !container.isAtEnd {
@@ -79,9 +90,15 @@ public enum RawJson: Codable, Equatable {
       } else if let value = try? container.decode(String.self) {
         arr.append(.string(value))
       } else if let value = try? container.nestedContainer(keyedBy: JSONCodingKeys.self) {
-        arr.append(RawJson(from: value))
+        try arr.append(RawJson(from: value))
       } else if let value = try? container.nestedUnkeyedContainer() {
-        arr.append(RawJson(from: value))
+        try arr.append(RawJson(from: value))
+      } else {
+        if try container.decodeNil() {
+          arr.append(.null)
+        } else {
+          throw DecodingError.typeMismatch(RawJson.self, DecodingError.Context(codingPath: container.codingPath, debugDescription: "could not encode as nil"))
+        }
       }
     }
     self = .array(arr)
@@ -114,6 +131,9 @@ public enum RawJson: Codable, Equatable {
       for (key, value) in dict {
         try container.encode(value, forKey: JSONCodingKeys(stringValue: key)!)
       }
+
+    case .null:
+      break
     }
   }
 }

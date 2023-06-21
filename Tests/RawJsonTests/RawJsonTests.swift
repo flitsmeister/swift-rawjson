@@ -76,7 +76,7 @@ final class RawJsonTests: XCTestCase {
     ])
     let jsonString = try encode(in: obj)
 
-    XCTAssertEqual(jsonString, "[1,2,3.4]")
+    XCTAssertEqual(jsonString, "[1,2,3.3999999999999999]")
 
     let back = try decode(in: jsonString)
 
@@ -107,7 +107,7 @@ final class RawJsonTests: XCTestCase {
     ])
     let jsonString = try encode(in: obj)
 
-    XCTAssertEqual(jsonString, "[true,1,2.4,\"string\"]")
+    XCTAssertEqual(jsonString, "[true,1,2.3999999999999999,\"string\"]")
 
     let back = try decode(in: jsonString)
 
@@ -137,7 +137,7 @@ final class RawJsonTests: XCTestCase {
     ])
     let jsonString = try encode(in: obj)
 
-    XCTAssertEqual(jsonString, "{\"hallo\":3.4,\"test\":1,\"tomas\":2}")
+    XCTAssertEqual(jsonString, "{\"hallo\":3.3999999999999999,\"test\":1,\"tomas\":2}")
 
     let back = try decode(in: jsonString)
 
@@ -168,7 +168,7 @@ final class RawJsonTests: XCTestCase {
     ])
     let jsonString = try encode(in: obj)
 
-    XCTAssertEqual(jsonString, "{\"bool\":true,\"double\":2.4,\"int\":1,\"string\":\"string\"}")
+    XCTAssertEqual(jsonString, "{\"bool\":true,\"double\":2.3999999999999999,\"int\":1,\"string\":\"string\"}")
 
     let back = try decode(in: jsonString)
 

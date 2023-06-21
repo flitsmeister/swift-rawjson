@@ -7,10 +7,10 @@
 
 import Foundation
 
-extension PartialCodable {
-  public func valueOrThrow() throws -> ConcreteType {
-    guard let value = value else {
-      if let error = error {
+public extension PartialCodable {
+  func valueOrThrow() throws -> ConcreteType {
+    guard let value else {
+      if let error {
         throw error
       } else {
         throw NSError(domain: "derp", code: 0)
