@@ -53,6 +53,17 @@ final class RawJsonTests: XCTestCase {
     XCTAssertEqual(obj, back)
   }
 
+  func testNull() throws {
+    let obj = RawJson.null
+    let jsonString = try encode(in: obj)
+
+    XCTAssertEqual(jsonString, "null")
+
+    let back = try decode(in: jsonString)
+
+    XCTAssertEqual(obj, back)
+  }
+
   func testArrayBool() throws {
     let obj = RawJson.array([
       RawJson.bool(true),

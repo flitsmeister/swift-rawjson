@@ -133,7 +133,8 @@ public enum RawJson: Codable, Equatable, Hashable {
       }
 
     case .null:
-      break
+      var container = encoder.singleValueContainer()
+      try container.encodeNil()
     }
   }
 }
