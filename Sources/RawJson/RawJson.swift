@@ -21,7 +21,7 @@ import Foundation
 ///   print(dict
 /// }
 /// ```
-public enum RawJson: Codable, Equatable {
+public enum RawJson: Codable, Equatable, Hashable {
   case bool(Bool)
   case double(Double)
   case string(String)
@@ -46,7 +46,7 @@ public enum RawJson: Codable, Equatable {
       } else if let stringValue = try? container.decode(String.self) {
         self = .string(stringValue)
       } else {
-        if try container.decodeNil() {
+        if container.decodeNil() {
           self = .null
         } else {
           throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "could not decode as nil"))

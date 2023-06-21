@@ -12,11 +12,11 @@ private struct TestModel: Codable, Hashable, Equatable {
   let test: String
 }
 
-private struct TestNestedModel: Codable, Equatable {
+private struct TestNestedModel: Codable, Hashable, Equatable {
   let test: FallbackCodable<String>
 }
 
-private struct TestArrayModel: Codable, Equatable {
+private struct TestArrayModel: Codable, Hashable, Equatable {
   let test: [FallbackCodable<String>]
 }
 
@@ -30,7 +30,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       FallbackCodable.value(TestModel(test: "tomas")),
     ])
   }
@@ -46,7 +46,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       FallbackCodable.raw(
         .dictionary([
           "test": .double(1.0),
@@ -73,7 +73,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([FallbackCodable<TestModel>].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       FallbackCodable.value(TestModel(test: "tomas")),
       FallbackCodable.raw(
         .dictionary([
@@ -93,7 +93,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([TestNestedModel].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       TestNestedModel(test: .value("tomas")),
     ])
   }
@@ -107,7 +107,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([TestNestedModel].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       TestNestedModel(test: .raw(.double(1), NSError(domain: "derp", code: 0))),
     ])
   }
@@ -123,7 +123,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([TestNestedModel].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       TestNestedModel(test: .value("tomas")),
       TestNestedModel(test: .raw(.double(1), NSError(domain: "derp", code: 0))),
     ])
@@ -138,7 +138,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([TestArrayModel].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       TestArrayModel(test: [
         .value("tomas"),
         .value("harkema"),
@@ -157,7 +157,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([TestArrayModel].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       TestArrayModel(test: [
         .value("tomas"),
         .raw(.double(1), NSError(domain: "derp", code: 0)),
@@ -178,7 +178,7 @@ final class FallbackCodableTests: XCTestCase {
 
     let parsed = try JSONDecoder().decode([FallbackCodable<TestArrayModel>].self, from: json)
 
-    XCTAssertEqual(parsed, [
+    assertEqual(parsed, [
       .value(
         TestArrayModel(test: [
           .value("tomas"),

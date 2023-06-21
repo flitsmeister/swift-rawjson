@@ -82,3 +82,14 @@ extension FallbackCodable: Equatable where ConcreteType: Equatable {
     }
   }
 }
+
+extension FallbackCodable: Hashable where ConcreteType: Hashable {
+  public func hash(into hasher: inout Hasher) {
+    switch self {
+    case let .value(value):
+      value.hash(into: &hasher)
+    case let .raw(raw, _):
+      raw.hash(into: &hasher)
+    }
+  }
+}
