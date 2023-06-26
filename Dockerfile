@@ -3,10 +3,6 @@ WORKDIR /root
 
 COPY Package.* .
 
-RUN sed -i.bu 's/^[^#]*.plugin(/\/\/&/' Package.swift; \
-    sed -i.bu 's/^[^#]*realm\/SwiftLint/\/\/&/' Package.swift; \
-    sed -i.bu 's/^[^#]*nicklockwood\/SwiftFormat/\/\/&/' Package.swift
-
 RUN swift package resolve
 
 COPY Sources Sources

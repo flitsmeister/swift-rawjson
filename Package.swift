@@ -3,6 +3,17 @@
 
 import PackageDescription
 
+#if os(Linux)
+let dependencies: [Package.Dependency] = []
+let plugins: [Target.PluginUsage] = []
+#else
+let dependencies: [Package.Dependency] = [
+  .package(url: "https://github.com/realm/SwiftLint", .upToNextMajor(from: "0.52.2")),
+  .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.51.12")),
+]
+let plugins: [Target.PluginUsage] = [.plugin(name: "SwiftLintPlugin", package: "SwiftLint"),]
+#endif
+
 let package = Package(
   name: "RawJson",
   platforms: [.macOS(.v12), .iOS(.v13)],
@@ -14,10 +25,7 @@ let package = Package(
       targets: ["RawJson"]
     ),
   ],
-  dependencies: [
-    .package(url: "https://github.com/realm/SwiftLint", .upToNextMajor(from: "0.52.2")),
-    .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.51.12")),
-  ],
+  dependencies: dependencies,
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
     // Targets can depend on other targets in this package and products from dependencies.
@@ -25,9 +33,7 @@ let package = Package(
       name: "RawJson",
       dependencies: [
       ],
-      plugins: [
-        .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
-      ]
+      plugins: plugins
     ),
     .testTarget(
       name: "RawJsonTests",
