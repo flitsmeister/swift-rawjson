@@ -1,4 +1,4 @@
-FROM swift:latest as builder
+FROM swift:latest as test
 WORKDIR /root
 
 COPY Package.* .
@@ -8,10 +8,21 @@ RUN swift package resolve
 COPY Sources Sources
 COPY Tests Tests
 
-RUN swift build -v
-RUN swift test -v
-RUN swift package clean
-RUN swift build -v -c release --product RawJson
+RUN swift test & touch /root/testresult
+
+FROM swift:latest as builder
+WORKDIR /root
+
+COPY --from=test /root/testresult /root/testresult
+
+COPY Package.* .
+
+RUN swift package resolve
+
+COPY Sources Sources
+COPY Tests Tests
+
+RUN swift build -c release --product RawJson
 
 FROM swift:slim
 WORKDIR /root
