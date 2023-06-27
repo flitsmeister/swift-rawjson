@@ -13,9 +13,13 @@ public extension PartialCodable {
       if let error {
         throw error
       } else {
-        throw NSError(domain: "derp", code: 0)
+        throw PartialCodableError.noValueAndNoErroPresent
       }
     }
     return value
   }
+}
+
+enum PartialCodableError: Error, LocalizedError {
+  case noValueAndNoErroPresent
 }

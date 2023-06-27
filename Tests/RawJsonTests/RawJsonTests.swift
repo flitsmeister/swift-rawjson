@@ -86,11 +86,11 @@ final class RawJsonTests: XCTestCase {
       RawJson.double(3.4),
     ])
     let jsonString = try encode(in: obj)
-#if os(Linux)
-    XCTAssertEqual(jsonString, "[1,2,3.4]")
-  #else
-    XCTAssertEqual(jsonString, "[1,2,3.3999999999999999]")
-  #endif
+    #if os(Linux)
+      XCTAssertEqual(jsonString, "[1,2,3.4]")
+    #else
+      XCTAssertEqual(jsonString, "[1,2,3.3999999999999999]")
+    #endif
     let back = try decode(in: jsonString)
 
     XCTAssertEqual(obj, back)
@@ -120,11 +120,11 @@ final class RawJsonTests: XCTestCase {
     ])
     let jsonString = try encode(in: obj)
 
-#if os(Linux)
-    XCTAssertEqual(jsonString, "[true,1,2.4,\"string\"]")
-#else
-    XCTAssertEqual(jsonString, "[true,1,2.3999999999999999,\"string\"]")
-#endif
+    #if os(Linux)
+      XCTAssertEqual(jsonString, "[true,1,2.4,\"string\"]")
+    #else
+      XCTAssertEqual(jsonString, "[true,1,2.3999999999999999,\"string\"]")
+    #endif
 
     let back = try decode(in: jsonString)
 
@@ -154,11 +154,11 @@ final class RawJsonTests: XCTestCase {
     ])
     let jsonString = try encode(in: obj)
 
-#if os(Linux)
-    XCTAssertEqual(jsonString, "{\"hallo\":3.4,\"test\":1,\"tomas\":2}")
-#else
-    XCTAssertEqual(jsonString, "{\"hallo\":3.3999999999999999,\"test\":1,\"tomas\":2}")
-#endif
+    #if os(Linux)
+      XCTAssertEqual(jsonString, "{\"hallo\":3.4,\"test\":1,\"tomas\":2}")
+    #else
+      XCTAssertEqual(jsonString, "{\"hallo\":3.3999999999999999,\"test\":1,\"tomas\":2}")
+    #endif
 
     let back = try decode(in: jsonString)
 
@@ -189,11 +189,11 @@ final class RawJsonTests: XCTestCase {
     ])
     let jsonString = try encode(in: obj)
 
-#if os(Linux)
-    XCTAssertEqual(jsonString, "{\"bool\":true,\"double\":2.4,\"int\":1,\"string\":\"string\"}")
-#else
-    XCTAssertEqual(jsonString, "{\"bool\":true,\"double\":2.3999999999999999,\"int\":1,\"string\":\"string\"}")
-#endif
+    #if os(Linux)
+      XCTAssertEqual(jsonString, "{\"bool\":true,\"double\":2.4,\"int\":1,\"string\":\"string\"}")
+    #else
+      XCTAssertEqual(jsonString, "{\"bool\":true,\"double\":2.3999999999999999,\"int\":1,\"string\":\"string\"}")
+    #endif
 
     let back = try decode(in: jsonString)
 
