@@ -1,24 +1,28 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 5.8
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import Foundation
 
-#if os(Linux)
-let dependencies: [Package.Dependency] = []
-let plugins: [Target.PluginUsage] = []
-#else
-let dependencies: [Package.Dependency] = [
-  .package(url: "https://github.com/realm/SwiftLint", .upToNextMajor(from: "0.52.2")),
-  .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.51.12")),
-]
-let plugins: [Target.PluginUsage] = [.plugin(name: "SwiftLintPlugin", package: "SwiftLint"),]
+var dependencies = [Package.Dependency]()
+var plugins = [Target.PluginUsage]()
+
+#if !os(Linux)
+if ProcessInfo.processInfo.environment["RESOLVE_COMMAND_PLUGINS"] != nil {
+  dependencies.append(contentsOf: [
+    .package(url: "https://github.com/realm/SwiftLint", .upToNextMajor(from: "0.52.2")),
+    .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.51.12")),
+  ])
+  plugins.append(contentsOf: [
+    .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+  ])
+}
 #endif
 
 let package = Package(
   name: "RawJson",
   platforms: [.macOS(.v12), .iOS(.v13)],
   products: [
-    // Products define the executables and libraries a package produces, making them visible to other packages.
     .library(
       name: "RawJson",
       type: .static,
@@ -27,13 +31,8 @@ let package = Package(
   ],
   dependencies: dependencies,
   targets: [
-    // Targets are the basic building blocks of a package, defining a module or a test suite.
-    // Targets can depend on other targets in this package and products from dependencies.
     .target(
-      name: "RawJson",
-      dependencies: [
-      ],
-      plugins: plugins
+      name: "RawJson"
     ),
     .testTarget(
       name: "RawJsonTests",
