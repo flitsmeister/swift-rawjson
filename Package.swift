@@ -25,7 +25,6 @@ let package = Package(
   products: [
     .library(
       name: "RawJson",
-      type: .static,
       targets: ["RawJson"]
     ),
   ],
