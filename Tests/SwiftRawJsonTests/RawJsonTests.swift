@@ -5,7 +5,7 @@
 //  Created by Tomas Harkema on 19/06/2023.
 //
 
-@testable import RawJson
+@testable import SwiftRawJson
 import XCTest
 
 final class RawJsonTests: XCTestCase {
