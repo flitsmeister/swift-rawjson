@@ -4,38 +4,54 @@
 import PackageDescription
 import Foundation
 
+let isXcode = ProcessInfo.processInfo.environment["__CFBundleIdentifier"] == "com.apple.dt.Xcode"
+let isSubDependency: () -> Bool = {
+    let context = ProcessInfo.processInfo.arguments.drop {
+        $0 != "-context"
+    }.dropFirst(1).first
+    guard let context else {
+        return false
+    }
+    guard let json = (try? JSONSerialization.jsonObject(with: context.data(using: .utf8) ?? Data())) as? [String: Any] else {
+        return false
+    }
+    guard let packageDirectory = json["packageDirectory"] as? String else {
+        return false
+    }
+    return packageDirectory.contains(".build") || packageDirectory.contains("DerivedData")
+}
+
 var dependencies = [Package.Dependency]()
 var plugins = [Target.PluginUsage]()
 
-#if !os(Linux)
-if ProcessInfo.processInfo.environment["RESOLVE_COMMAND_PLUGINS"] != nil {
-  dependencies.append(contentsOf: [
-    .package(url: "https://github.com/realm/SwiftLint", from: "0.52.2"),
-    .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.51.12"),
-  ])
-  plugins.append(contentsOf: [
-    .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
-  ])
+if isXcode && !isSubDependency() {
+    dependencies.append(contentsOf: [
+        .package(url: "https://github.com/realm/SwiftLint", from: "0.52.2"),
+        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.51.12"),
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.1.0"),
+    ])
+    plugins.append(contentsOf: [
+        .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+    ])
 }
-#endif
 
 let package = Package(
   name: "SwiftRawJson", // renamed so module collision will not happen
   platforms: [.macOS(.v12), .iOS(.v13)],
   products: [
     .library(
-      name: "SwiftRawJson",
-      targets: ["SwiftRawJson"]
+      name: "RawJson",
+      targets: ["RawJson"]
     ),
   ],
   dependencies: dependencies,
   targets: [
     .target(
-      name: "SwiftRawJson"
+      name: "RawJson"
     ),
     .testTarget(
-      name: "SwiftRawJsonTests",
-      dependencies: ["SwiftRawJson"]
+      name: "RawJsonTests",
+      dependencies: ["RawJson"]
     ),
   ]
 )
