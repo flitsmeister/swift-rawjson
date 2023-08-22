@@ -36,7 +36,7 @@ if isXcode && !isSubDependency() {
 }
 
 let package = Package(
-  name: "SwiftRawJson", // renamed so module collision will not happen
+  name: "swift-rawjson",
   platforms: [.macOS(.v12), .iOS(.v13)],
   products: [
     .library(
