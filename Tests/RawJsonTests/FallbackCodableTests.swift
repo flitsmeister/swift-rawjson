@@ -5,7 +5,7 @@
 //  Created by Tomas Harkema on 19/06/2023.
 //
 
-@testable import SwiftRawJson
+@testable import RawJson
 import XCTest
 
 private struct TestModel: Codable, Hashable, Equatable {

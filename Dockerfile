@@ -1,4 +1,17 @@
-FROM swift:latest as test
+FROM swift:latest as package
+WORKDIR /root
+
+COPY Package.* .
+
+RUN swift package resolve
+
+FROM package as source
+WORKDIR /root
+
+COPY Sources Sources
+COPY Tests Tests
+
+FROM source as test
 WORKDIR /root
 
 COPY Package.* .
@@ -8,24 +21,16 @@ RUN swift package resolve
 COPY Sources Sources
 COPY Tests Tests
 
-RUN swift test & touch /root/testresult
+RUN swift test && touch /root/testresult.txt
 
-FROM swift:latest as builder
+FROM source as builder
 WORKDIR /root
-
-COPY --from=test /root/testresult /root/testresult
-
-COPY Package.* .
-
-RUN swift package resolve
-
-COPY Sources Sources
-COPY Tests Tests
 
 RUN swift build -c release --product RawJson
 
 FROM swift:slim
 WORKDIR /root
 
-COPY --from=builder /root/.build/release/libRawJson.a /root/libRawJson.a
+COPY --from=test /root/testresult.txt /root/testresult.txt
+COPY --from=builder /root/.build/release /root/.build/release
 
